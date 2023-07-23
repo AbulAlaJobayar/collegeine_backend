@@ -30,6 +30,7 @@ async function run() {
 
  //  College Collection
  const collegeCollection = client.db("college").collection("collegeinfo");
+ const studentCollection = client.db("college").collection("student");
 
 
 // get university data
@@ -44,6 +45,20 @@ app.get("/postdata/:id", async (req, res) => {
   console.log(id)
   const filter = { _id: new ObjectId(id)};
   const result = await collegeCollection.findOne(filter);
+  res.send(result);
+});
+
+// insert student data
+app.post("/postdata", async (req, res) => {
+  const body = req.body;
+  const result = await studentCollection.insertOne(body);
+  res.send(result);
+});
+// get student data
+app.get("/users/:email", async (req, res) => {
+  const result = await studentCollection
+    .find({enroll_email: req.params.email })
+    .toArray();
   res.send(result);
 });
 
