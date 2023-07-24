@@ -31,6 +31,7 @@ async function run() {
  //  College Collection
  const collegeCollection = client.db("college").collection("collegeinfo");
  const studentCollection = client.db("college").collection("student");
+ const feedbackCollection = client.db("college").collection("feedback");
 
 
 // get university data
@@ -59,6 +60,18 @@ app.get("/users/:email", async (req, res) => {
   const result = await studentCollection
     .find({enroll_email: req.params.email })
     .toArray();
+  res.send(result);
+});
+// insert feedback data
+app.post("/feedback", async (req, res) => {
+  const body = req.body;
+  const result = await feedbackCollection.insertOne(body);
+  res.send(result);
+});
+
+// get feedback data
+app.get("/feedbackdata", async (req, res) => {
+  const result =await feedbackCollection.find().toArray();
   res.send(result);
 });
 
