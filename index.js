@@ -43,7 +43,7 @@ app.get("/university", async (req, res) => {
 // get single data from id
 app.get("/postdata/:id", async (req, res) => {
   const id = req.params.id;
-  console.log(id)
+  
   const filter = { _id: new ObjectId(id)};
   const result = await collegeCollection.findOne(filter);
   res.send(result);
@@ -72,6 +72,36 @@ app.post("/feedback", async (req, res) => {
 // get feedback data
 app.get("/feedbackdata", async (req, res) => {
   const result =await feedbackCollection.find().toArray();
+  res.send(result);
+});
+
+// get single data from id
+app.get("/studentdata/:id", async (req, res) => {
+  const id = req.params.id;
+  const filter = { _id: new ObjectId(id)};
+  const result = await studentCollection.findOne(filter);
+  res.send(result);
+});
+// update student data
+app.put("/updatedata/:id", async (req, res) => {
+  const id = req.params.id;
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updateDoc = req.body;
+  const update = {
+    $set: {
+      name: updateDoc.name,
+      email: updateDoc.email,
+      college_name: updateDoc.college_name,
+      address: updateDoc.address,
+
+    },
+  };
+  const result = await studentCollection.updateOne(
+    filter,
+    update,
+    options
+  );
   res.send(result);
 });
 
